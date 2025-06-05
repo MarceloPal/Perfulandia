@@ -10,10 +10,10 @@ spring:
         locator:
           enabled: true
       routes:
-        - id: clientes
+        - id: producto
           uri: http://localhost:8090
           predicates: 
-            -Path=/api/v1/clientes/**
+            -Path=/api/v1/producto/**
 
 eureka:
   client:
