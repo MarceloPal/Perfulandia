@@ -12,10 +12,10 @@ spring:
       routes:
         - id: producto
           uri: http://localhost:8090
-          predicates: 
-            -Path=/api/v1/producto/**
+          predicates:
+            - Path=/api/v1/producto/**
 
 eureka:
   client:
-    register-with-erueka: false
+    register-with-eureka: false
     fetch-registry: false
