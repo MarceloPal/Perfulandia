@@ -2,9 +2,9 @@ package com.microservice.eureka;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
+import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer; //Habilita funciones de Eureka
 
-@EnableEurekaServer
+@EnableEurekaServer //Activa el servidor de eureka
 @SpringBootApplication
 public class MicroserviceEurekaApplication {
 

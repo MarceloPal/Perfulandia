@@ -9,7 +9,7 @@ eureka:
   instance:
     hostname: localhost
   client:
-    register-with-eureka: false
-    fetch-registry: false
+    register-with-eureka: false #Indica que no debe registrarse a si mismo en el servidor Eureka
+    fetch-registry: false #Indica que no debe buscar el registro de servicios en el servidor Eureka
     server-url:
-      defaultZone: http://localhost:${server.port}/eureka/ 
+      defaultZone: http://localhost:${server.port}/eureka/ #URL del servidor Eureka

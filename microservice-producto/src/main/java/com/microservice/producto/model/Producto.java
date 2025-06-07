@@ -15,8 +15,6 @@ import lombok.NoArgsConstructor;
 import jakarta.validation.constraints.*;
 
 
-//import java.util.Date;
-
 @Entity
 @Table(name = "producto")
 @Data
@@ -29,7 +27,7 @@ public class Producto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id_producto;
 
-    @Column(nullable = false, unique = true)
+    @Column(unique = true, nullable = false)
     @NotBlank(message = "Se debe rellenar el espacio")
     @Size(min=5,max=8)
     private String Codigo;
@@ -56,12 +54,8 @@ public class Producto {
     @Min(0)
     private int Stock;
 
-    //@Temporal(TemporalType.DATE)
-    //private Date fechaLanzamiento;
 
     @Size(max = 255)
     private String Descripcion;
 
-    //@Column(length = 1)
-    //private char activo = 'S';
 }

@@ -2,6 +2,7 @@ package com.microservice.producto.controller;
 
 import com.microservice.producto.model.Producto;
 import com.microservice.producto.service.ProductoService;
+import com.microservice.producto.dto.ProductoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 
@@ -53,9 +54,22 @@ public class ProductoController {
         Optional<Producto> producto = productoService.getProductbyId(id_producto);
 
         if(producto.isPresent()){
+
+            ProductoDTO proDTO = new ProductoDTO();
+            proDTO.setId_producto(producto.get().getId_producto());
+            proDTO.setCodigo(producto.get().getCodigo());
+            proDTO.setNombre(producto.get().getNombre());
+            proDTO.setMarca(producto.get().getMarca());
+            proDTO.setFragancia(producto.get().getFragancia());
+            proDTO.setGenero(producto.get().getGenero());
+            proDTO.setPresentacionMl(producto.get().getPresentacionMl());
+            proDTO.setPrecio(producto.get().getPrecio());
+            proDTO.setStock(producto.get().getStock());
+            proDTO.setDescripcion(producto.get().getDescripcion());
+
+
             return ResponseEntity.ok()
-                        .header("mi-encabezado","valor")
-                        .body(producto.get());
+                        .header("mi-encabezado","valor").body(producto.get());
         }
         else{
             Map<String,String> errorBody = new HashMap<>();
@@ -63,31 +77,52 @@ public class ProductoController {
             errorBody.put("status", "404");
             errorBody.put("timestamp", LocalDateTime.now().toString());
 
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(errorBody);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorBody);
 
         }
     }
     
     //PA GUARDAR
     @PostMapping
-    public ResponseEntity<?> save(@Valid @RequestBody Producto producto){
+    public ResponseEntity<?> save(@Valid @RequestBody ProductoDTO productoDTO){
         try {
+
+            Producto producto = new Producto();
+            producto.setCodigo(producto.getCodigo());
+            producto.setNombre(producto.getNombre());
+            producto.setMarca(producto.getMarca());
+            producto.setFragancia(producto.getFragancia());
+            producto.setGenero(producto.getGenero());
+            producto.setPresentacionMl(producto.getPresentacionMl());
+            producto.setPrecio(producto.getPrecio());
+            producto.setStock(producto.getStock());
+            producto.setDescripcion(producto.getDescripcion());      
+
+
             Producto productoGuardado = productoService.save(producto);
 
-            URI location = ServletUriComponentsBuilder
-                    .fromCurrentRequest()
-                    .path("/{id}")
-                    .buildAndExpand(productoGuardado.getId_producto())
-                    .toUri();
+            ProductoDTO responseDTO = new ProductoDTO();
+            responseDTO.setId_producto(productoGuardado.getId_producto());
+            responseDTO.setCodigo(productoGuardado.getCodigo());
+            responseDTO.setNombre(productoGuardado.getNombre());
+            responseDTO.setMarca(productoGuardado.getMarca());
+            responseDTO.setFragancia(productoGuardado.getFragancia());
+            responseDTO.setGenero(productoGuardado.getGenero());
+            responseDTO.setPresentacionMl(productoGuardado.getPresentacionMl());
+            responseDTO.setPrecio(productoGuardado.getPrecio());
+            responseDTO.setStock(productoGuardado.getStock());
+            responseDTO.setDescripcion(productoGuardado.getDescripcion());
 
-            return ResponseEntity
-                    .created(location)
-                    .body(productoGuardado);
+
+            URI location = ServletUriComponentsBuilder
+                    .fromCurrentRequest().path("/{id}")
+                    .buildAndExpand(productoGuardado.getId_producto()).toUri();
+
+            return ResponseEntity.created(location).body(responseDTO);
             
         } catch (DataIntegrityViolationException e) {
             Map<String,String> error = new HashMap<>();
-            error.put("message", "El perfume estás registrado.");
+            error.put("message", "El perfume que está intentando guardar ya fue registrado.");
             return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
         }
     }
@@ -95,22 +130,37 @@ public class ProductoController {
 
     //PA EDITAR
     @PutMapping("/{id_producto}")
-    public ResponseEntity<?> update(@PathVariable int id_producto,@RequestBody Producto producto) {
+    public ResponseEntity<?> update(@PathVariable int id_producto,@RequestBody ProductoDTO productoDTO) {
 
         try {
-               Producto proEditado = productoService.getProductById2(id_producto);
-                proEditado.setCodigo(producto.getCodigo());
-                proEditado.setNombre(producto.getNombre());
-                proEditado.setMarca(producto.getMarca());
-                proEditado.setFragancia(producto.getFragancia());
-                proEditado.setGenero(producto.getGenero());
-                proEditado.setPresentacionMl(producto.getPresentacionMl());
-                proEditado.setPrecio(producto.getPrecio());
-                proEditado.setStock(producto.getStock());
-                proEditado.setDescripcion(producto.getDescripcion());
+              
+            Producto producto = new Producto();
+            producto.setId_producto(id_producto);
+            producto.setCodigo(productoDTO.getCodigo());
+            producto.setNombre(productoDTO.getNombre());
+            producto.setMarca(productoDTO.getMarca());
+            producto.setFragancia(productoDTO.getFragancia());
+            producto.setGenero(productoDTO.getGenero());
+            producto.setPresentacionMl(productoDTO.getPresentacionMl());
+            producto.setPrecio(productoDTO.getPrecio());
+            producto.setStock(productoDTO.getStock());
+            producto.setDescripcion(productoDTO.getDescripcion());
 
-                Producto proActualizado = productoService.save(proEditado);
-                return ResponseEntity.ok(proActualizado);
+            Producto proEditado = productoService.save(producto);
+
+            ProductoDTO responseDTO = new ProductoDTO();
+            responseDTO.setId_producto(proEditado.getId_producto());
+            responseDTO.setCodigo(proEditado.getCodigo());
+            responseDTO.setNombre(proEditado.getNombre());
+            responseDTO.setMarca(proEditado.getMarca());
+            responseDTO.setFragancia(proEditado.getFragancia());
+            responseDTO.setGenero(proEditado.getGenero());
+            responseDTO.setPresentacionMl(proEditado.getPresentacionMl());
+            responseDTO.setPrecio(proEditado.getPrecio());
+            responseDTO.setStock(proEditado.getStock());
+            responseDTO.setDescripcion(proEditado.getDescripcion());
+
+            return ResponseEntity.ok(responseDTO);
 
         } catch (Exception e) {
             Map<String,String> error = new HashMap<>();
@@ -125,10 +175,11 @@ public class ProductoController {
    @DeleteMapping("/{id_producto}")
    public ResponseEntity<?> eliminar(@PathVariable int id_producto){
         try {
-                productoService.delete(id_producto);
-                 Map<String,String> response = new HashMap<>();
-                response.put("message","El producto con ID: " + id_producto + ", ha sido eliminado exitosamente."); 
-                return ResponseEntity.ok(response);
+
+            productoService.delete(id_producto);
+            Map<String,String> response = new HashMap<>();
+            response.put("message","El producto con ID: " + id_producto + ", ha sido eliminado exitosamente."); 
+            return ResponseEntity.ok(response);
 
             
         } catch (Exception e) {

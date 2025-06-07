@@ -8,12 +8,16 @@ spring:
     gateway:
       discovery:
         locator:
-          enabled: true
+          enabled: true # Habilita el descubrimiento de servicios a través de Eureka
       routes:
         - id: productos
           uri: http://localhost:8090
           predicates:
             - Path=/api/v1/productos/**
+        - id: ventas
+          uri: http://localhost:9090
+          predicates:
+            - Path=/api/v1/ventas/**
 
 eureka:
   client:

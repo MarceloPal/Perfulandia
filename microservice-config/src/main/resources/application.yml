@@ -1,13 +1,13 @@
 server:
-  port: 8888
+  port: 8888 #Puerto en el que correra el config server
 
 spring:
   profiles:
-    active: native
+    active: native #Indica que config leera arhivos de configuración desde ruta local.
   application:
     name: config-server
   cloud:
     config:
       server:
         native:
-          search-locations: classpath:/configurations
+          search-locations: classpath:/configurations #Ruta donde se encuentran los archivos de configuración
