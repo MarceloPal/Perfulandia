@@ -29,7 +29,7 @@ public class Producto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id_producto;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     @NotBlank(message = "Se debe rellenar el espacio")
     @Size(min=5,max=8)
     private String Codigo;

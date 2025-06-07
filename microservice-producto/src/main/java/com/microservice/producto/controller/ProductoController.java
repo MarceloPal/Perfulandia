@@ -8,7 +8,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-//import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -32,7 +32,7 @@ import java.time.LocalDateTime;
 
 
 @RestController
-@RequestMapping("api/v1/productos")
+@RequestMapping("/api/v1/productos")
 
 
 public class ProductoController {
@@ -70,7 +70,7 @@ public class ProductoController {
     }
     
     //PA GUARDAR
-    @PostMapping("/save")
+    @PostMapping
     public ResponseEntity<?> save(@Valid @RequestBody Producto producto){
         try {
             Producto productoGuardado = productoService.save(producto);
@@ -87,34 +87,35 @@ public class ProductoController {
             
         } catch (DataIntegrityViolationException e) {
             Map<String,String> error = new HashMap<>();
-            error.put("message", "El perfume fue registrado exitosamente.");
+            error.put("message", "El perfume estás registrado.");
             return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
         }
     }
 
 
     //PA EDITAR
-    @PostMapping("/{id_producto}")
-    public ResponseEntity<Producto> update(@PathVariable int id_producto,@RequestBody Producto producto) {
+    @PutMapping("/{id_producto}")
+    public ResponseEntity<?> update(@PathVariable int id_producto,@RequestBody Producto producto) {
 
         try {
-               Producto pro = productoService.getProductById2(id_producto);
-                pro.setId_producto(id_producto);
-                pro.setCodigo(producto.getCodigo());
-                pro.setNombre(producto.getNombre());
-                pro.setMarca(producto.getMarca());
-                pro.setFragancia(producto.getFragancia());
-                pro.setGenero(producto.getGenero());
-                pro.setPresentacionMl(producto.getPresentacionMl());
-                pro.setPrecio(producto.getPrecio());
-                pro.setStock(producto.getStock());
-                pro.setDescripcion(producto.getDescripcion());
+               Producto proEditado = productoService.getProductById2(id_producto);
+                proEditado.setCodigo(producto.getCodigo());
+                proEditado.setNombre(producto.getNombre());
+                proEditado.setMarca(producto.getMarca());
+                proEditado.setFragancia(producto.getFragancia());
+                proEditado.setGenero(producto.getGenero());
+                proEditado.setPresentacionMl(producto.getPresentacionMl());
+                proEditado.setPrecio(producto.getPrecio());
+                proEditado.setStock(producto.getStock());
+                proEditado.setDescripcion(producto.getDescripcion());
 
-                productoService.save(producto);
-                return ResponseEntity.ok(producto);
+                Producto proActualizado = productoService.save(proEditado);
+                return ResponseEntity.ok(proActualizado);
 
         } catch (Exception e) {
-            return ResponseEntity.notFound().build();
+            Map<String,String> error = new HashMap<>();
+            error.put("message", "No se pudo actualizar el producto con ID: " + id_producto + ". Puede que no exista o haya un error en la base de datos.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
         }
       
     }
@@ -125,11 +126,15 @@ public class ProductoController {
    public ResponseEntity<?> eliminar(@PathVariable int id_producto){
         try {
                 productoService.delete(id_producto);
-                return ResponseEntity.noContent().build();
+                 Map<String,String> response = new HashMap<>();
+                response.put("message","El producto con ID: " + id_producto + ", ha sido eliminado exitosamente."); 
+                return ResponseEntity.ok(response);
 
             
         } catch (Exception e) {
-            return ResponseEntity.notFound().build();
+            Map<String,String> error = new HashMap<>();
+            error.put("message", "No se pudo eliminar el producto con ID: " + id_producto + ". Puede que no exista o haya un error en la base de datos.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
         }
 
 
