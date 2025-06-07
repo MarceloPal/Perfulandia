@@ -51,7 +51,7 @@ public class Venta {
         } else {
             throw new IllegalStateException("Costo y cantidad deben estar definidos");
         }
-    }
+    } //Calculo para el costo total de la venta
 
     private int id_producto;
 }

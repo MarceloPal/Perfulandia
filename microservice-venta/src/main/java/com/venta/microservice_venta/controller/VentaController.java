@@ -3,6 +3,7 @@ package com.venta.microservice_venta.controller;
 import com.venta.microservice_venta.model.Venta;
 import com.venta.microservice_venta.service.VentaService;
 import com.venta.microservice_venta.DTO.VentaDTO;
+import com.venta.microservice_venta.http.response.ProductobyVentaResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -22,7 +23,7 @@ import org.springframework.http.ResponseEntity;
 
 import jakarta.validation.Valid;
 
-import java.util.List;
+//import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Optional;
@@ -36,14 +37,15 @@ public class VentaController {
     @Autowired
     private VentaService ventaService;
 
-    // Listar todas las ventas
-    @GetMapping("/listar")
-    public ResponseEntity<List<Venta>> listarVentas() {
-        List<Venta> ventas = ventaService.findAll();
-        return ResponseEntity.ok(ventas);
-    }
+    // Lista las ventas
+    @GetMapping("/producto/{id_producto}")
+    public ResponseEntity<ProductobyVentaResponse> getProductoDeVenta(@PathVariable int id_producto) {
+    ProductobyVentaResponse producto = ventaService.obtenerProducto(id_producto);
+    return ResponseEntity.ok(producto);
+}
 
     // Crear una venta
+    // Debe ser manual en postman, sin incluir el costototal, ya que se calcula automáticamente
     @PostMapping
     public ResponseEntity<?> save(@Valid @RequestBody VentaDTO ventaDTO) {
 
@@ -80,6 +82,7 @@ public class VentaController {
     
     }
     
+    //Bucar alguna venta por ID
     @GetMapping("/{id}")
     public ResponseEntity<Venta> buscarPorId(@PathVariable int id) {
         Optional<Venta> venta = ventaService.findById(id);
@@ -87,6 +90,8 @@ public class VentaController {
                     .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+
+    //Elimina alguna venta por ID
     @DeleteMapping("/{id}")
     public ResponseEntity<?> eliminarVenta(@PathVariable int id) {
     try {

@@ -1,5 +1,7 @@
 package com.venta.microservice_venta.service;
 
+import com.venta.microservice_venta.client.ProductoClient;
+import com.venta.microservice_venta.http.response.ProductobyVentaResponse;
 import com.venta.microservice_venta.model.Venta;
 import com.venta.microservice_venta.repository.VentaRepository;
 
@@ -16,6 +18,13 @@ public class VentaService {
 
     @Autowired
     private VentaRepository ventaRepository;
+
+    @Autowired
+    private ProductoClient productoClient;
+
+    public ProductobyVentaResponse obtenerProducto(int id_producto) {
+    return productoClient.getProductoById(id_producto);
+    }
 
     public List<Venta> findAll() {
         return ventaRepository.findAll();

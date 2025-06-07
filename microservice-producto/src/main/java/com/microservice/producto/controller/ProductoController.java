@@ -29,7 +29,7 @@ import java.util.HashMap;
 import java.util.Optional;
 import java.net.URI;
 import java.time.LocalDateTime;
-//import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 @RestController
@@ -41,13 +41,13 @@ public class ProductoController {
     @Autowired
     private ProductoService productoService;
 
-    //PA LISTAR COMPLETA
+    //Lista todos los productos
     @GetMapping("/listar")
     public List<Producto> getAllProducts() {
         return productoService.findAll();
     }
     
-    //MUESTRA OBJETO BUSCADO
+    //Muestra un producto por ID
     @GetMapping("/{id_producto}")
     public ResponseEntity<?> getProductById(@PathVariable Integer id_producto) {
 
@@ -82,7 +82,8 @@ public class ProductoController {
         }
     }
     
-    //PA GUARDAR
+    //Este método guarda un nuevo producto
+    //tuve que agregar un if para que no se repita el código del producto
   @PostMapping
   public ResponseEntity<?> save(@Valid @RequestBody ProductoDTO productoDTO){
     try {
@@ -123,7 +124,6 @@ public class ProductoController {
         return ResponseEntity.created(location).body(responseDTO);
 
     } catch(DataIntegrityViolationException e){
-            //Ejemplo: Error si hay un campo único duplicado (ej: email repetido)
             Map<String,String> error = new HashMap<>();
             error.put("message","Ya existe un producto con el código: " + productoDTO.getCodigo() + " o hay un error de integridad referencial.");
             return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
@@ -131,7 +131,7 @@ public class ProductoController {
 }
 
 
-    //PA EDITAR
+    //Edita un producto por ID
     @PutMapping("/{id_producto}")
     public ResponseEntity<ProductoDTO> update(@PathVariable int id_producto,@RequestBody ProductoDTO productoDTO) {
 
@@ -174,7 +174,7 @@ public class ProductoController {
     }
     
 
-   //Pa eliminar
+   //Elimina un producto por ID
    @DeleteMapping("/{id_producto}")
    public ResponseEntity<?> eliminar(@PathVariable int id_producto){
         try {
