@@ -13,7 +13,7 @@ spring:
         - id: productos
           uri: http://localhost:8090
           predicates:
-            - Path=/api/v1/productos/**
+            - Path=/api/v1/productos/** #Rutas que se redirigen al microservicio de prodcutos.
         - id: ventas
           uri: http://localhost:9090
           predicates:

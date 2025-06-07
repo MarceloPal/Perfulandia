@@ -25,7 +25,7 @@ public class Producto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id_producto;
+    private int Id_producto;
 
     @Column(unique = true, nullable = false)
     @NotBlank(message = "Se debe rellenar el espacio")

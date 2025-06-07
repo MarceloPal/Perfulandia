@@ -83,49 +83,46 @@ public class ProductoController {
     }
     
     //PA GUARDAR
-    @PostMapping
-    public ResponseEntity<?> save(@Valid @RequestBody ProductoDTO productoDTO){
-        try {
+  @PostMapping
+  public ResponseEntity<?> save(@Valid @RequestBody ProductoDTO productoDTO){
+    try {
+        Producto producto = new Producto();
+        producto.setCodigo(productoDTO.getCodigo());
+        producto.setNombre(productoDTO.getNombre());
+        producto.setMarca(productoDTO.getMarca());
+        producto.setFragancia(productoDTO.getFragancia());
+        producto.setGenero(productoDTO.getGenero());
+        producto.setPresentacionMl(productoDTO.getPresentacionMl());
+        producto.setPrecio(productoDTO.getPrecio());
+        producto.setStock(productoDTO.getStock());
+        producto.setDescripcion(productoDTO.getDescripcion());
 
-            Producto producto = new Producto();
-            producto.setCodigo(producto.getCodigo());
-            producto.setNombre(producto.getNombre());
-            producto.setMarca(producto.getMarca());
-            producto.setFragancia(producto.getFragancia());
-            producto.setGenero(producto.getGenero());
-            producto.setPresentacionMl(producto.getPresentacionMl());
-            producto.setPrecio(producto.getPrecio());
-            producto.setStock(producto.getStock());
-            producto.setDescripcion(producto.getDescripcion());      
+        Producto productoGuardado = productoService.save(producto);
 
+        ProductoDTO responseDTO = new ProductoDTO();
+        responseDTO.setId_producto(productoGuardado.getId_producto());
+        responseDTO.setCodigo(productoGuardado.getCodigo());
+        responseDTO.setNombre(productoGuardado.getNombre());
+        responseDTO.setMarca(productoGuardado.getMarca());
+        responseDTO.setFragancia(productoGuardado.getFragancia());
+        responseDTO.setGenero(productoGuardado.getGenero());
+        responseDTO.setPresentacionMl(productoGuardado.getPresentacionMl());
+        responseDTO.setPrecio(productoGuardado.getPrecio());
+        responseDTO.setStock(productoGuardado.getStock());
+        responseDTO.setDescripcion(productoGuardado.getDescripcion());
 
-            Producto productoGuardado = productoService.save(producto);
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest().path("/{id}")
+                .buildAndExpand(productoGuardado.getId_producto()).toUri();
 
-            ProductoDTO responseDTO = new ProductoDTO();
-            responseDTO.setId_producto(productoGuardado.getId_producto());
-            responseDTO.setCodigo(productoGuardado.getCodigo());
-            responseDTO.setNombre(productoGuardado.getNombre());
-            responseDTO.setMarca(productoGuardado.getMarca());
-            responseDTO.setFragancia(productoGuardado.getFragancia());
-            responseDTO.setGenero(productoGuardado.getGenero());
-            responseDTO.setPresentacionMl(productoGuardado.getPresentacionMl());
-            responseDTO.setPrecio(productoGuardado.getPrecio());
-            responseDTO.setStock(productoGuardado.getStock());
-            responseDTO.setDescripcion(productoGuardado.getDescripcion());
+        return ResponseEntity.created(location).body(responseDTO);
 
-
-            URI location = ServletUriComponentsBuilder
-                    .fromCurrentRequest().path("/{id}")
-                    .buildAndExpand(productoGuardado.getId_producto()).toUri();
-
-            return ResponseEntity.created(location).body(responseDTO);
-            
-        } catch (DataIntegrityViolationException e) {
-            Map<String,String> error = new HashMap<>();
-            error.put("message", "El perfume que está intentando guardar ya fue registrado.");
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
-        }
+    } catch (DataIntegrityViolationException e) {
+        Map<String,String> error = new HashMap<>();
+        error.put("message", "El perfume que está intentando guardar ya fue registrado.");
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
     }
+}
 
 
     //PA EDITAR
