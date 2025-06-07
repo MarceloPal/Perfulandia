@@ -41,7 +41,6 @@ public class Venta {
     @Column(nullable = false)
     private Integer cantidad;
 
-    @Column(nullable = false)
     private Double costoTotal;
 
     @PrePersist

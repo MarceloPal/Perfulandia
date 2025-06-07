@@ -35,4 +35,10 @@ public class ProductoService {
     public void delete(int id_producto){
         productoRepository.deleteById(id_producto);
     }
+
+   public boolean existsByCodigo(String codigo) {
+    return productoRepository.existsByCodigo(codigo);
 }
+
+}
+

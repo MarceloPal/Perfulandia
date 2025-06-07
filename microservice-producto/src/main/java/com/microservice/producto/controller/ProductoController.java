@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 
 import org.springframework.web.bind.annotation.RequestMapping;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -18,7 +19,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import org.springframework.http.HttpStatus;
-//import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 
 import jakarta.validation.Valid;
@@ -55,17 +55,17 @@ public class ProductoController {
 
         if(producto.isPresent()){
 
-            ProductoDTO proDTO = new ProductoDTO();
-            proDTO.setId_producto(producto.get().getId_producto());
-            proDTO.setCodigo(producto.get().getCodigo());
-            proDTO.setNombre(producto.get().getNombre());
-            proDTO.setMarca(producto.get().getMarca());
-            proDTO.setFragancia(producto.get().getFragancia());
-            proDTO.setGenero(producto.get().getGenero());
-            proDTO.setPresentacionMl(producto.get().getPresentacionMl());
-            proDTO.setPrecio(producto.get().getPrecio());
-            proDTO.setStock(producto.get().getStock());
-            proDTO.setDescripcion(producto.get().getDescripcion());
+            ProductoDTO dto = new ProductoDTO();
+            dto.setId_producto(producto.get().getId_producto());
+            dto.setCodigo(producto.get().getCodigo());
+            dto.setNombre(producto.get().getNombre());
+            dto.setMarca(producto.get().getMarca());
+            dto.setFragancia(producto.get().getFragancia());
+            dto.setGenero(producto.get().getGenero());
+            dto.setPresentacionMl(producto.get().getPresentacionMl());
+            dto.setPrecio(producto.get().getPrecio());
+            dto.setStock(producto.get().getStock());
+            dto.setDescripcion(producto.get().getDescripcion());
 
 
             return ResponseEntity.ok()
@@ -86,6 +86,11 @@ public class ProductoController {
   @PostMapping
   public ResponseEntity<?> save(@Valid @RequestBody ProductoDTO productoDTO){
     try {
+        if (productoService.existsByCodigo(productoDTO.getCodigo())) {
+            Map<String,String> error = new HashMap<>();
+            error.put("message", "Ya existe un producto con el código: " + productoDTO.getCodigo());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+        }
         Producto producto = new Producto();
         producto.setCodigo(productoDTO.getCodigo());
         producto.setNombre(productoDTO.getNombre());
@@ -117,17 +122,18 @@ public class ProductoController {
 
         return ResponseEntity.created(location).body(responseDTO);
 
-    } catch (DataIntegrityViolationException e) {
-        Map<String,String> error = new HashMap<>();
-        error.put("message", "El perfume que está intentando guardar ya fue registrado.");
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
-    }
+    } catch(DataIntegrityViolationException e){
+            //Ejemplo: Error si hay un campo único duplicado (ej: email repetido)
+            Map<String,String> error = new HashMap<>();
+            error.put("message","Ya existe un producto con el código: " + productoDTO.getCodigo() + " o hay un error de integridad referencial.");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+        }
 }
 
 
     //PA EDITAR
     @PutMapping("/{id_producto}")
-    public ResponseEntity<?> update(@PathVariable int id_producto,@RequestBody ProductoDTO productoDTO) {
+    public ResponseEntity<ProductoDTO> update(@PathVariable int id_producto,@RequestBody ProductoDTO productoDTO) {
 
         try {
               
@@ -162,7 +168,7 @@ public class ProductoController {
         } catch (Exception e) {
             Map<String,String> error = new HashMap<>();
             error.put("message", "No se pudo actualizar el producto con ID: " + id_producto + ". Puede que no exista o haya un error en la base de datos.");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
       
     }
