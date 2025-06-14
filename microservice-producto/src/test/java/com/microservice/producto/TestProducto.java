@@ -1,5 +1,5 @@
 package com.microservice.producto;
 
-public class TestProducto {
+public class ProductoServiceTest {
 
 }
