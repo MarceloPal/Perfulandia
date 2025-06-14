@@ -54,4 +54,13 @@ public class Venta {
     } //Calculo para el costo total de la venta
 
     private int id_producto;
+
+    @ManyToMany
+    @JoinTable( 
+        name="producto_venta"
+        ,joinColumns= @JoinColumn(name="id_producto")
+        ,inverseJoinColumns = @JoinColumn(name="id_venta")
+    )
+    private set<Producto> producto;
+    
 }
