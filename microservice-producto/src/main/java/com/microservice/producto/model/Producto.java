@@ -5,6 +5,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.*;
 
@@ -12,6 +15,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.util.Set;
 
 
 @Entity
@@ -58,5 +62,15 @@ public class Producto {
 
     @Size(max = 255)
     private String descripcion;
+
+     @ManyToMany
+    @JoinTable( 
+        name="producto_venta"
+        ,joinColumns= @JoinColumn(name="id_producto")
+        ,inverseJoinColumns = @JoinColumn(name="id_venta")
+    )
+    
+    private Set<Producto> producto; // Se ocupa Set pq es muchos a muchos, y no se repiten los productos en una venta
+    
 
 }

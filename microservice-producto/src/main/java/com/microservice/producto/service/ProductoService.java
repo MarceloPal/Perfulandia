@@ -38,7 +38,11 @@ public class ProductoService {
 
    public boolean existsByCodigo(String codigo) {
     return productoRepository.existsByCodigo(codigo);
-}
+    }
+
+    public ProductoService(ProductoRepository productoRepository) {
+        this.productoRepository = productoRepository;
+    }
 
 }
 

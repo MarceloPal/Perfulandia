@@ -3,3 +3,6 @@ spring:
     name: msvc-venta
   config:
     import: optional:configserver:http://localhost:8888
+    
+  profiles:
+    active: test
