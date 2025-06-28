@@ -4,4 +4,11 @@ spring:
   config:
     import: optional:configserver:http://localhost:8888
   profiles:
-    active: test
+    active: dev
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+    path: /doc/swagger-ui.html
