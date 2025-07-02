@@ -1,5 +1,7 @@
 package com.venta.microservice_venta;
 
+import com.venta.microservice_venta.client.ProductoClient;
+import com.venta.microservice_venta.http.response.ProductobyVentaResponse;
 import com.venta.microservice_venta.model.Venta;
 import com.venta.microservice_venta.repository.VentaRepository;
 import com.venta.microservice_venta.service.VentaService;
@@ -8,20 +10,26 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
+
 
 @ExtendWith(MockitoExtension.class)
 class VentaServiceTest {
 
     @InjectMocks
     private VentaService ventaService;
+
+    @Mock
+    private ProductoClient productoClient;
 
     @Mock
     private VentaRepository ventaRepository;
@@ -88,5 +96,38 @@ class VentaServiceTest {
         ventaService.deleteById(id_venta);
 
         verify(ventaRepository, times(1)).deleteById(id_venta);
+    }
+
+    @Test
+    void existsById_shouldReturnTrueIfExists() {
+        when(ventaRepository.existsById(1)).thenReturn(true);
+
+        boolean exists = ventaService.existsById(1);
+
+        assertThat(exists).isTrue();
+        verify(ventaRepository).existsById(1);
+    }
+
+    @Test
+    void obtenerProducto_shouldReturnProductobyVentaResponse() {
+        ProductobyVentaResponse response = new ProductobyVentaResponse();
+        when(productoClient.getProductoById(5)).thenReturn(response);
+
+        ProductobyVentaResponse result = ventaService.obtenerProducto(5);
+
+        assertThat(result).isEqualTo(response);
+        verify(productoClient).getProductoById(5);
+    }
+
+    @Test
+    void findAllByIdProducto_shouldReturnVentasList() {
+        Venta venta1 = new Venta();
+        Venta venta2 = new Venta();
+        when(ventaRepository.findAllByIdProducto(10)).thenReturn(List.of(venta1, venta2));
+
+        List<Venta> ventas = ventaService.findAllByIdProducto(10);
+
+        assertThat(ventas).containsExactly(venta1, venta2);
+        verify(ventaRepository).findAllByIdProducto(10);
     }
 }

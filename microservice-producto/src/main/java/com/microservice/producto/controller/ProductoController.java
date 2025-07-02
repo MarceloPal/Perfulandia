@@ -2,6 +2,13 @@ package com.microservice.producto.controller;
 
 import com.microservice.producto.model.Producto;
 import com.microservice.producto.service.ProductoService;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import com.microservice.producto.dto.ProductoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -34,7 +41,7 @@ import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api/v1/productos")
-
+@Tag(name="Productos",description = "Operaciones relacionadas con los productos del sistema")
 
 public class ProductoController {
 
@@ -42,12 +49,20 @@ public class ProductoController {
     private ProductoService productoService;
 
     //Lista todos los productos
+    @Operation(summary = "Obtener todos los productos",description = "Obtiene una lista de todos los productos")
+    @ApiResponse(responseCode = "200", description = "Operación exitosa")
     @GetMapping("/listar")
     public List<Producto> getAllProducts() {
         return productoService.findAll();
     }
     
     //Muestra un producto por ID
+    @Operation(summary = "Obtener producto por ID", description = "Busca un producto por su ID")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Producto encontrado"),
+        @ApiResponse(responseCode = "404", description = "Producto no encontrado")
+    })
+    @Parameter(name = "id_producto", description = "ID del producto", required = true)
     @GetMapping("/{id_producto}")
     public ResponseEntity<?> getProductById(@PathVariable Integer id_producto) {
 
@@ -84,6 +99,11 @@ public class ProductoController {
     
     //Este método guarda un nuevo producto
     //tuve que agregar un if para que no se repita el código del producto
+@Operation(summary = "Crear un producto", description = "Crea un nuevo producto")
+    @ApiResponses({
+        @ApiResponse(responseCode = "201", description = "Producto creado exitosamente"),
+        @ApiResponse(responseCode = "409", description = "Conflicto: código de producto duplicado o error de integridad")
+    })
   @PostMapping
   public ResponseEntity<?> save(@Valid @RequestBody ProductoDTO productoDTO){
     try {
@@ -132,6 +152,12 @@ public class ProductoController {
 
 
     //Edita un producto por ID
+    @Operation(summary = "Actualizar producto", description = "Actualiza un producto existente por su ID")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Producto actualizado exitosamente"),
+        @ApiResponse(responseCode = "404", description = "Producto no encontrado")
+    })
+    @Parameter(name = "id_producto", description = "ID del producto", required = true)
     @PutMapping("/{id_producto}")
     public ResponseEntity<ProductoDTO> update(@PathVariable int id_producto,@RequestBody ProductoDTO productoDTO) {
 
@@ -175,6 +201,12 @@ public class ProductoController {
     
 
    //Elimina un producto por ID
+   @Operation(summary = "Eliminar producto", description = "Elimina un producto por su ID")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Producto eliminado exitosamente"),
+        @ApiResponse(responseCode = "404", description = "Producto no encontrado")
+    })
+    @Parameter(name = "id_producto", description = "ID del producto", required = true)
    @DeleteMapping("/{id_producto}")
    public ResponseEntity<?> eliminar(@PathVariable int id_producto){
         try {

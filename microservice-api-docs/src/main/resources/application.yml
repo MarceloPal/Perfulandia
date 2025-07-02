@@ -1,0 +1,8 @@
+server:
+  port: 8060
+
+spring:
+  application:
+    name: microservice-api-docs
+  config:
+    import: optional:configserver:http://localhost:8888

@@ -5,6 +5,12 @@ import com.venta.microservice_venta.service.VentaService;
 import com.venta.microservice_venta.DTO.VentaDTO;
 import com.venta.microservice_venta.http.response.ProductobyVentaResponse;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 
@@ -31,12 +37,15 @@ import java.net.URI;
 
 @RestController
 @RequestMapping("/api/v1/ventas")
+@Tag(name = "Venta", description = "Operaciones relacionadas con las ventas del sistema")
 public class VentaController {
 
     @Autowired
     private VentaService ventaService;
 
     // Lista las ventas
+   @Operation(summary = "Obtener todos las ventas", description = "Obtiene una lista de todas las ventas")
+    @ApiResponse(responseCode = "200", description = "Operación exitosa")
     @GetMapping("/producto/{id_producto}")
     public ResponseEntity<ProductobyVentaResponse> getProductoDeVenta(@PathVariable int id_producto) {
     ProductobyVentaResponse producto = ventaService.obtenerProducto(id_producto);
@@ -45,6 +54,12 @@ public class VentaController {
 
     // Crear una venta
     // Debe ser manual en postman, sin incluir el costototal, ya que se calcula automáticamente
+    
+    @Operation(summary = "Guardas una venta", description = "Crea una venta")
+    @ApiResponses({
+        @ApiResponse(responseCode = "201", description = "Venta guardada exitosamente"),
+        @ApiResponse(responseCode = "409", description = "Conflicto: código de venta duplicado o error de integridad")
+    })
     @PostMapping
     public ResponseEntity<?> save(@Valid @RequestBody VentaDTO ventaDTO) {
 
@@ -82,6 +97,12 @@ public class VentaController {
     }
     
     //Bucar alguna venta por ID
+    @Operation(summary = "Obtener una venta por ID", description = "Busca una venta por su ID")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Venta encontrado"),
+        @ApiResponse(responseCode = "404", description = "Venta no encontrado")
+    })
+    @Parameter(name = "id_venta", description = "ID de la venta", required = true)
     @GetMapping("/{id}")
     public ResponseEntity<Venta> buscarPorId(@PathVariable int id) {
         Optional<Venta> venta = ventaService.findById(id);
@@ -91,6 +112,12 @@ public class VentaController {
 
 
     //Elimina alguna venta por ID
+    @Operation(summary = "Eliminar venta", description = "Elimina una venta por su ID")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Venta eliminada exitosamente"),
+        @ApiResponse(responseCode = "404", description = "Venta no encontrado")
+    })
+    @Parameter(name = "id_venta", description = "ID de Venta", required = true)
     @DeleteMapping("/{id}")
     public ResponseEntity<?> eliminarVenta(@PathVariable int id) {
     try {

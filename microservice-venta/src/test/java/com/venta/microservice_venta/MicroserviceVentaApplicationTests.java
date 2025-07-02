@@ -14,5 +14,11 @@ class MicroserviceVentaApplicationTests {
 	void contextLoads() {
 	}
 
+	@Test
+	void mainMethodTest() {
+   	 	System.setProperty("spring.profiles.active", "test");
+    	System.setProperty("server.port", "0"); 
+    	MicroserviceVentaApplication.main(new String[] {});
+	}
 
 }

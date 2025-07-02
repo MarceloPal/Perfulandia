@@ -4,20 +4,29 @@ server:
 spring:
   application:
     name: msvc-gateway
+    
   cloud:
     gateway:
       discovery:
         locator:
-          enabled: true # Habilita el descubrimiento de servicios a través de Eureka
+          enabled: false
       routes:
         - id: productos
           uri: http://localhost:8090
           predicates:
             - Path=/api/v1/productos/** #Rutas que se redirigen al microservicio de prodcutos.
+        - id: productos-v2
+          uri: http://localhost:8090
+          predicates:
+            - Path=/api/v2/productos/**
         - id: ventas
           uri: http://localhost:9090
           predicates:
             - Path=/api/v1/ventas/**
+        - id: ventas-v2
+          uri: http://localhost:9090
+          predicates:
+            - Path=/api/v2/ventas/**
 
 eureka:
   client:

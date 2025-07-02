@@ -6,7 +6,10 @@ spring:
     
   profiles:
     active: dev
-
+  jmx:
+    enabled: false #tuve que desactivar JMX porque no se puede iniciar el microservicio de venta ya que 
+                  # tenia algun bloqueo con la configuracion de JMX del microservicio de venta
+    
 springdoc:
   api-docs:
     enabled: true

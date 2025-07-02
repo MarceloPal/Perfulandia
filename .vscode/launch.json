@@ -62,6 +62,17 @@
             "mainClass": "com.venta.microservice_venta.MicroserviceVentaApplication",
             "projectName": "microservice-venta",
             "args": "",
+            "envFile": "${workspaceFolder}/.env",
+            "vmArgs": " -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=51597 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dspring.jmx.enabled=true -Djava.rmi.server.hostname=localhost -Dspring.application.admin.enabled=true -Dspring.boot.project.name=microservice-venta"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-MicroserviceApiDocsApplication<microservice-api-docs>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.microservice.api.docs.MicroserviceApiDocsApplication",
+            "projectName": "microservice-api-docs",
+            "args": "",
             "envFile": "${workspaceFolder}/.env"
         }
     ]
