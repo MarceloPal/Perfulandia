@@ -3,14 +3,20 @@ spring:
     name: msvc-producto
   config:
     import: optional:configserver:http://localhost:8888
+
   profiles:
     active: dev
+    
   jmx:
-    enabled: false
+    enabled: false # Desactive jmx, ya que me generaba conflictos al inicilizar los microservicios
 
 springdoc:
   api-docs:
     enabled: true
   swagger-ui:
     enabled: true
-    path: /doc/swagger-ui.html
+    path: /doc/swagger-ui.html 
+  
+#Habilitar el acceso a la documentación de Swagger y open API
+#Al agregar estas herramientas ya puedo exponer la documentacion local del microservicio
+#icluyendo sus endpoints y sus modelos de datos

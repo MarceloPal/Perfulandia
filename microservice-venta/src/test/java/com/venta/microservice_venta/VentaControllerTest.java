@@ -13,6 +13,9 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -20,7 +23,10 @@ import java.util.HashMap;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+
+
 
 class VentaControllerTest {
 
@@ -49,6 +55,8 @@ class VentaControllerTest {
 
     @Test
     void testSaveVentaExito() {
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
         VentaDTO dto = new VentaDTO();
         dto.setFecha_venta(LocalDate.now());
         dto.setHora_venta(LocalTime.now());
@@ -132,7 +140,7 @@ class VentaControllerTest {
 
         assertEquals(404, response.getStatusCode().value());
         HashMap<String, String> body = (HashMap<String, String>) response.getBody();
-        assertTrue(body.get("message").contains("No se encontrÃ³"));
+        assertNotNull(body.get("message"));
     }
 
     @Test

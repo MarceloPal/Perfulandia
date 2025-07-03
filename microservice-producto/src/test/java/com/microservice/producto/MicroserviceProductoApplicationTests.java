@@ -23,3 +23,9 @@ class MicroserviceProductoApplicationTests {
 
 
 }
+
+//Las pruebas unitarias se ejecutan con JUnit 5, que es la versión más reciente de JUnit.
+//La anotación @SpringBootTest se utiliza para indicar que es una prueba de integración de Spring Boot.
+//La anotación @ActiveProfiles("test") se utiliza para activar el perfil de configuración "test" durante la ejecución de las pruebas.
+//El método contextLoads() verifica que el contexto de la aplicación se carga correctamente.
+//Las pruebas unitarias aseguran que la logica interna (servicios, controladores, repositorias) funcionen correctamente en aislamiento.

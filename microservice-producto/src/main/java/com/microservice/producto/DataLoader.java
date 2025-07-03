@@ -8,8 +8,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
-//import java.util.List;
-//import java.util.Random;
+//Acá se carga la data de prueba al iniciar la aplicación en el perfil "test"
 
 @Profile("test")
 @Component
@@ -37,7 +36,7 @@ public class DataLoader implements CommandLineRunner {
 
             productoRepository.save(producto);
         }
-        //List<Producto> producto = productoRepository.findAll();
+       
 
     }
 }

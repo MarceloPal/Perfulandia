@@ -21,10 +21,12 @@ import java.util.*;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
-@RestController
-@RequestMapping("/api/v2/productos")
+@RestController //Marca esta clase como un controlador REST
+//es una clase que maneja solicitudes HTTP y define cómo responder a ellas, siguiendo los principios de la arquitectura REST.
+@RequestMapping("/api/v2/productos") //Define la ruta base para todas las solicitudes a este controlador
 public class ProductoControllerv2 {
-
+    //Autowired permite inyectar dependencias automáticamente,
+    //eso es darle a un clase objetos que necesita para funcionar, sin que ella tenga que crearlos.
     @Autowired
     private ProductoService productoService;
 

@@ -37,7 +37,7 @@ import java.util.Optional;
 import java.net.URI;
 import java.time.LocalDateTime;
 
-
+//Se crean las peticiones REST para el microservicio de productos
 
 @RestController
 @RequestMapping("/api/v1/productos")
@@ -56,7 +56,11 @@ public class ProductoController {
         return productoService.findAll();
     }
     
+
+    //Estas notaciones se utilizan para documentar mejor los endpoints rest del codigo
+    //de forma que swagger genere una documentacion mas clara.
     //Muestra un producto por ID
+     
     @Operation(summary = "Obtener producto por ID", description = "Busca un producto por su ID")
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "Producto encontrado"),

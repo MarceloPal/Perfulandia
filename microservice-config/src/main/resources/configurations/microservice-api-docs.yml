@@ -14,3 +14,5 @@ springdoc:
       - name: ventas
         url: http://localhost:9090/v3/api-docs
     path: /swagger-ui.html
+
+#Acá garantizamos mostrar la documentación de los microservicios de productos y ventas
